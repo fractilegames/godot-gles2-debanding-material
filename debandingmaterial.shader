@@ -23,12 +23,9 @@ void fragment() {
     vec4 albedo_tex = texture(texture_albedo, base_uv);
     albedo_tex *= COLOR;
     
-    // Add noise to albedo to hide banding in GLES2 (no full screen debanding available)
-    if(OUTPUT_IS_SRGB)
-    {
-        float offset = fract(noise_magic.z * fract(dot(FRAGCOORD.xy, noise_magic.xy)));
-        albedo_tex.rgb += vec3(offset, 1.0 - offset, offset) * debanding_dither;
-    }
+    // Add noise to albedo to hide banding
+    float offset = fract(noise_magic.z * fract(dot(FRAGCOORD.xy, noise_magic.xy)));
+    albedo_tex.rgb += vec3(offset, 1.0 - offset, offset) * debanding_dither;
     
     ALBEDO = albedo.rgb * albedo_tex.rgb;
     METALLIC = metallic;
